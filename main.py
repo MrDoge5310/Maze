@@ -1,4 +1,5 @@
 import pygame
+from maze_tamplate import *
 pygame.init()
 
 
@@ -19,19 +20,23 @@ class Sprite:
 class Player(Sprite):
     def __init__(self, x, y, filename):
         super().__init__(x, y, filename)
-        self.step = 5
+        self.step = 10
 
     def move_right(self):
-        self.hitbox.x += self.step
+        if self.hitbox.x + self.width + self.step <= width:
+            self.hitbox.x += self.step
 
     def move_left(self):
-        self.hitbox.x -= self.step
+        if self.hitbox.x - self.step >= 0:
+            self.hitbox.x -= self.step
 
     def move_up(self):
-        self.hitbox.y -= self.step
+        if self.hitbox.y - self.step >= 0:
+            self.hitbox.y -= self.step
 
     def move_down(self):
-        self.hitbox.y += self.step
+        if self.hitbox.y + self.height + self.step <= height:
+            self.hitbox.y += self.step
 
 
 class Enemy(Sprite):
@@ -49,6 +54,8 @@ bg = pygame.transform.scale(pygame.image.load('img/bg.png'), (width, height))
 
 player = Player(0, 0, 'img/fox.png')
 enemy = Enemy(730, 530, 'img/bunny.png')
+
+maze = Maze(width, height)
 
 GameOver = False
 while not GameOver:
@@ -72,6 +79,8 @@ while not GameOver:
 
     player.draw(window)
     enemy.draw(window)
+
+    maze.drawMaze(window)
 
     pygame.display.update()
 
