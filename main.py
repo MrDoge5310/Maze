@@ -1,87 +1,28 @@
 import pygame
-from maze_tamplate import *
 pygame.init()
-
-
-class Sprite:
-    def __init__(self, x, y, filename):
-        self.x = x
-        self.y = y
-        self.width = 70
-        self.height = 70
-        self.hitbox = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.image = pygame.image.load(filename)
-        self.image = pygame.transform.scale(self.image, (self.width, self.height))
-
-    def draw(self, wnd):
-        wnd.blit(self.image, (self.hitbox.x, self.hitbox.y))
-
-
-class Player(Sprite):
-    def __init__(self, x, y, filename):
-        super().__init__(x, y, filename)
-        self.step = 10
-
-    def move_right(self):
-        if self.hitbox.x + self.width + self.step <= width:
-            self.hitbox.x += self.step
-
-    def move_left(self):
-        if self.hitbox.x - self.step >= 0:
-            self.hitbox.x -= self.step
-
-    def move_up(self):
-        if self.hitbox.y - self.step >= 0:
-            self.hitbox.y -= self.step
-
-    def move_down(self):
-        if self.hitbox.y + self.height + self.step <= height:
-            self.hitbox.y += self.step
-
-
-class Enemy(Sprite):
-    def __init__(self, x, y, filename):
-        super().__init__(x, y, filename)
-
 
 width = 800
 height = 600
 
-window = pygame.display.set_mode((width, height))
-pygame.display.set_caption('Maze')
+screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
+running = True
 
-bg = pygame.transform.scale(pygame.image.load('img/bg.png'), (width, height))
-
-player = Player(0, 0, 'img/fox.png')
-enemy = Enemy(730, 530, 'img/bunny.png')
-
-maze = Maze(width, height)
-
-GameOver = False
-while not GameOver:
-    window.blit(bg, (0, 0))
-
+while running:
+    # poll for events
+    # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            GameOver = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                player.move_right()
+            running = False
 
-            if event.key == pygame.K_LEFT:
-                player.move_left()
+    # fill the screen with a color to wipe away anything from last frame
+    screen.fill("purple")
 
-            if event.key == pygame.K_UP:
-                player.move_up()
+    # RENDER YOUR GAME HERE
 
-            if event.key == pygame.K_DOWN:
-                player.move_down()
+    # flip() the display to put your work on screen
+    pygame.display.flip()
 
-    player.draw(window)
-    enemy.draw(window)
-
-    maze.drawMaze(window)
-
-    pygame.display.update()
+    clock.tick(60)  # limits FPS to 60
 
 pygame.quit()
